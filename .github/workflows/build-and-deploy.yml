@@ -1,128 +1,58 @@
-# name: Build and Deploy to JFrog
+# # name: Build and Deploy to JFrog
 
-# on:
-#   workflow_dispatch:
-#     inputs:
-#       repo_url:
-#         description: 'GitHub Repository (owner/repo-name)'
-#         required: true
-#       jfrog_url:
-#         description: 'JFrog Artifactory URL'
-#         required: true
+# # on:
+# #   workflow_dispatch:
+# #     inputs:
+# #       repo_url:
+# #         description: 'GitHub Repository (owner/repo-name)'
+# #         required: true
+# #       jfrog_url:
+# #         description: 'JFrog Artifactory URL'
+# #         required: true
 
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout Target Repo
-#         uses: actions/checkout@v4
-#         with:
-#           repository: ${{ github.event.inputs.repo_url }}
-#           # repository: ${{ github.event.inputs.repo_url }}
-#           token: ${{ secrets.GH_TOKEN }}
+# # jobs:
+# #   build:
+# #     runs-on: ubuntu-latest
+# #     steps:
+# #       - name: Checkout Target Repo
+# #         uses: actions/checkout@v4
+# #         with:
+# #           repository: ${{ github.event.inputs.repo_url }}
+# #           # repository: ${{ github.event.inputs.repo_url }}
+# #           token: ${{ secrets.GH_TOKEN }}
 
-#       - name: Setup Node.js
-#         uses: actions/setup-node@v4
-#         with:
-#           node-version: 18
-#           cache: 'npm'
+# #       - name: Setup Node.js
+# #         uses: actions/setup-node@v4
+# #         with:
+# #           node-version: 18
+# #           cache: 'npm'
 
-#       - name: Install Dependencies
-#         run: npm install
+# #       - name: Install Dependencies
+# #         run: npm install
 
-#       - name: Run Unit Tests
-#         run: npm test
+# #       - name: Run Unit Tests
+# #         run: npm test
 
-#       - name: Build Application
-#         run: npm run build
+# #       - name: Build Application
+# #         run: npm run build
 
-#       - name: Upload Build Artifact
-#         uses: actions/upload-artifact@v4
-#         with:
-#           name: build-artifact
-#           path: dist/
-#           retention-days: 1
+# #       - name: Upload Build Artifact
+# #         uses: actions/upload-artifact@v4
+# #         with:
+# #           name: build-artifact
+# #           path: dist/
+# #           retention-days: 1
 
-#   deploy:
-#     needs: build
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Download Build Artifact
-#         uses: actions/download-artifact@v4
-#         with:
-#           name: build-artifact
-#           path: dist/
-# ------
-name: Build and Deploy to JFrog
-
-on:
-  workflow_dispatch:
-    inputs:
-      repo_url:
-        description: 'GitHub Repository (format: owner/repo-name)'
-        required: true
-      jfrog_url:
-        description: 'JFrog Artifactory URL'
-        required: true
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Target Repo
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ github.event.inputs.repo_url }}
-          token: ${{ secrets.GH_TOKEN }}
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: 'npm'
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Run Unit Tests
-        run: npm test
-
-      - name: Build Application
-        run: npm run build
-
-      - name: Upload Build Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifact
-          path: dist/
-          retention-days: 1
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Target Repo
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ github.event.inputs.repo_url }}
-          token: ${{ secrets.GH_TOKEN }}
-
-      - name: Download Build Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: build-artifact
-          path: dist/
-
-      - name: Upload Artifact to JFrog (Hardcoded Credentials)
-        run: |
-          echo "Uploading artifact to JFrog..."
-          FILE_PATH="dist/*"
-          TARGET_PATH="artifacts-generic-local/"
-
-          curl -uayush.sai2025@gmail.com:cmVmdGtuOjAxOjE3NzA5ODAzNzM6MU15Rld2alhvckdPTGR4UU85WDF4eWxwUjdm \
-               -T $FILE_PATH "https://ayushsaini12341.jfrog.io/artifactory/$TARGET_PATH"
-
-
+# #   deploy:
+# #     needs: build
+# #     runs-on: ubuntu-latest
+# #     steps:
+# #       - name: Download Build Artifact
+# #         uses: actions/download-artifact@v4
+# #         with:
+# #           name: build-artifact
+# #           path: dist/
+# # ------
 # name: Build and Deploy to JFrog
 
 # on:
@@ -139,13 +69,6 @@ jobs:
 #   build:
 #     runs-on: ubuntu-latest
 #     steps:
-#       - name: Validate Repository Input
-#         run: |
-#           if [[ ! "${{ github.event.inputs.repo_url }}" =~ ^[a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+$ ]]; then
-#             echo "Error: Invalid repository format. Expected 'owner/repo-name', got '${{ github.event.inputs.repo_url }}'"
-#             exit 1
-#           fi
-
 #       - name: Checkout Target Repo
 #         uses: actions/checkout@v4
 #         with:
@@ -198,3 +121,165 @@ jobs:
 
 #           curl -uayush.sai2025@gmail.com:cmVmdGtuOjAxOjE3NzA5ODAzNzM6MU15Rld2alhvckdPTGR4UU85WDF4eWxwUjdm \
 #                -T $FILE_PATH "https://ayushsaini12341.jfrog.io/artifactory/$TARGET_PATH"
+
+
+# # name: Build and Deploy to JFrog
+
+# # on:
+# #   workflow_dispatch:
+# #     inputs:
+# #       repo_url:
+# #         description: 'GitHub Repository (format: owner/repo-name)'
+# #         required: true
+# #       jfrog_url:
+# #         description: 'JFrog Artifactory URL'
+# #         required: true
+
+# # jobs:
+# #   build:
+# #     runs-on: ubuntu-latest
+# #     steps:
+# #       - name: Validate Repository Input
+# #         run: |
+# #           if [[ ! "${{ github.event.inputs.repo_url }}" =~ ^[a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+$ ]]; then
+# #             echo "Error: Invalid repository format. Expected 'owner/repo-name', got '${{ github.event.inputs.repo_url }}'"
+# #             exit 1
+# #           fi
+
+# #       - name: Checkout Target Repo
+# #         uses: actions/checkout@v4
+# #         with:
+# #           repository: ${{ github.event.inputs.repo_url }}
+# #           token: ${{ secrets.GH_TOKEN }}
+
+# #       - name: Setup Node.js
+# #         uses: actions/setup-node@v4
+# #         with:
+# #           node-version: 18
+# #           cache: 'npm'
+
+# #       - name: Install Dependencies
+# #         run: npm install
+
+# #       - name: Run Unit Tests
+# #         run: npm test
+
+# #       - name: Build Application
+# #         run: npm run build
+
+# #       - name: Upload Build Artifact
+# #         uses: actions/upload-artifact@v4
+# #         with:
+# #           name: build-artifact
+# #           path: dist/
+# #           retention-days: 1
+
+# #   deploy:
+# #     needs: build
+# #     runs-on: ubuntu-latest
+# #     steps:
+# #       - name: Checkout Target Repo
+# #         uses: actions/checkout@v4
+# #         with:
+# #           repository: ${{ github.event.inputs.repo_url }}
+# #           token: ${{ secrets.GH_TOKEN }}
+
+# #       - name: Download Build Artifact
+# #         uses: actions/download-artifact@v4
+# #         with:
+# #           name: build-artifact
+# #           path: dist/
+
+# #       - name: Upload Artifact to JFrog (Hardcoded Credentials)
+# #         run: |
+# #           echo "Uploading artifact to JFrog..."
+# #           FILE_PATH="dist/*"
+# #           TARGET_PATH="artifacts-generic-local/"
+
+# #           curl -uayush.sai2025@gmail.com:cmVmdGtuOjAxOjE3NzA5ODAzNzM6MU15Rld2alhvckdPTGR4UU85WDF4eWxwUjdm \
+# #                -T $FILE_PATH "https://ayushsaini12341.jfrog.io/artifactory/$TARGET_PATH"
+
+
+
+
+name: Build and Deploy to JFrog
+
+on:
+  workflow_dispatch:
+    inputs:
+      repo_url:
+        description: 'GitHub Repository (format: owner/repo-name)'
+        required: true
+      jfrog_url:
+        description: 'JFrog Artifactory URL'
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract Repository Name
+        run: |
+          echo "Original repo_url: ${{ github.event.inputs.repo_url }}"
+          REPO_NAME=$(echo "${{ github.event.inputs.repo_url }}" | sed 's|github.com/||')
+          echo "Stripped repo_url: $REPO_NAME"
+          echo "REPO_NAME=$REPO_NAME" >> $GITHUB_ENV
+
+      - name: Checkout Target Repo
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.REPO_NAME }}  # Uses the cleaned-up repository format
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Unit Tests
+        run: npm test
+
+      - name: Build Application
+        run: npm run build
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifact
+          path: dist/
+          retention-days: 1
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract Repository Name
+        run: |
+          REPO_NAME=$(echo "${{ github.event.inputs.repo_url }}" | sed 's|github.com/||')
+          echo "REPO_NAME=$REPO_NAME" >> $GITHUB_ENV
+
+      - name: Checkout Target Repo
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.REPO_NAME }}
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact
+          path: dist/
+
+      - name: Upload Artifact to JFrog (Hardcoded Credentials)
+        run: |
+          echo "Uploading artifact to JFrog..."
+          FILE_PATH="dist/*"
+          TARGET_PATH="artifacts-generic-local/"
+
+          curl -uayush.sai2025@gmail.com:cmVmdGtuOjAxOjE3NzA5ODAzNzM6MU15Rld2alhvckdPTGR4UU85WDF4eWxwUjdm \
+               -T $FILE_PATH "https://ayushsaini12341.jfrog.io/artifactory/$TARGET_PATH"
+
